@@ -1,0 +1,17 @@
+.error_label {
+    color: #F44336;
+    font-weight: 600;
+    margin: 10px 0px;
+}
+
+.not_found_container {
+    text-align: center;
+    margin-top: 96px;
+    padding: 20px;
+    background-size: 5px 5px !important;
+    min-height: 100vh;
+    text-align: center;
+    font-size: 90px;
+    font-family: 'Righteous', cursive;
+    color:black;
+}
