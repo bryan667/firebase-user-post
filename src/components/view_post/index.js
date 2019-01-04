@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Button} from 'react-bootstrap'
 import {validateFunction, showError, convertArray, reverseArray} from '../ui/misc'
-import {firebasePosts} from '../../firebase-db'
+import ImageUploader from './image_uploader'
+import {firebase, firebasePosts} from '../../firebase-db'
 import retrieveUserData from '../../high-order-comp/user_data'
 import '../../css/view_post.css'
 
@@ -12,6 +13,14 @@ class ViewPost extends Component {
         formError: true,
         userData: '',
         disabled: false,
+        image:{
+            value:'',
+            fileName: '',
+            validation:{
+                required: false,
+            },
+            valid:false,
+        },
         textarea: {
             value: '',
             validation: {
@@ -36,7 +45,7 @@ class ViewPost extends Component {
     componentDidMount() {
         firebasePosts.limitToLast(this.state.itemsToDisplay).on('value', ((snap)=> {
             const arrayPosts = convertArray(snap)
-            document.querySelector('.posts_div').scrollTop = 0
+            document.querySelector('.posts_area').scrollTop = 0
             this.setState({
                 posts: reverseArray(arrayPosts),
                 postsLoading: false
@@ -48,9 +57,11 @@ class ViewPost extends Component {
         posts ?
             posts.map((items, i)=>(
                 <div key={i}>
-                    <h4><b>{`${items.fullName} (${items.email})`}</b></h4>
-                    <p>{items.post}</p>
-                    <b>{items.timeStamp}</b>
+                    <div className='posts_div'>
+                        <h4><b>{`${items.fullName} (${items.email})`}</b></h4>
+                        <p>{items.post}</p>
+                        <b>{items.timeStamp}</b>
+                    </div>
                     <hr />
                 </div>
             ))
@@ -132,12 +143,42 @@ class ViewPost extends Component {
         }
     }
 
+    storeFilename(imageFilename) {
+        const imageData = this.state.image
+        imageData.fileName = imageFilename
+
+        this.setState({image: imageData})
+    }
+
+    removeImage = () => {
+
+        firebase.storage().ref('images').child(this.state.image.fileName).delete().then(()=> {
+            console.log(`file has been deleted: ${this.state.image.fileName}`)
+        }).catch(function(error) {
+            console.log('Uh-oh, an error occurred!')
+        });
+
+        const imageData = {...this.state.image}
+        imageData.value = '';
+        imageData.valid = false;
+
+        this.setState({
+            image: imageData
+        })
+    }
+
     render() {
         const { disabled, postsLoading} = this.state
 
         return (
             <div className='textarea_block'>
                 <form>
+                    {console.log(this.state.image.fileName)}
+                    <ImageUploader
+                        tag={"Insert Image"}
+                        filename={(filename)=> this.storeFilename(filename)}
+                        removeImage={()=> this.removeImage()}
+                    />
                     <textarea
                         placeholder='post here'
                         onChange={(event)=> this.updateForm(event)}
@@ -154,7 +195,7 @@ class ViewPost extends Component {
                     </div>
                 </form>
                 <hr />
-                <div className='posts_div'
+                <div className='posts_area'
                     onScroll={(event) => this.onScroll(event)}
                 >
                     <hr />

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import Routes from './routes';
 import {firebase} from './firebase-db'
-import './css/index.css'
+import './css/main.css'
 
 const App = (props) => {
   return (
