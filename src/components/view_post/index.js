@@ -20,7 +20,11 @@ class ViewPost extends Component {
             valid: false,
             validationMessage: '',
         },
-        posts: []
+        posts: [],
+        previousLength: 0,
+        scrollHeight: 0,
+        itemsToDisplay: 10,
+        postsLoading: true,
     }
 
     static getDerivedStateFromProps(props,state) {
@@ -30,16 +34,14 @@ class ViewPost extends Component {
     }
 
     componentDidMount() {
-        this.retrieveLastPosts()
-    }
-
-    retrieveLastPosts() {
-        firebasePosts.limitToLast(5).once('value').then((snap)=> {
+        firebasePosts.limitToLast(this.state.itemsToDisplay).on('value', ((snap)=> {
             const arrayPosts = convertArray(snap)
+            document.querySelector('.posts_div').scrollTop = 0
             this.setState({
-                posts: reverseArray(arrayPosts)
+                posts: reverseArray(arrayPosts),
+                postsLoading: false
             })
-        })
+        }))
     }
 
     mapPosts = (posts) => (
@@ -55,6 +57,28 @@ class ViewPost extends Component {
         :
         null
     )
+
+    onScroll(event) {
+        if (this.state.posts.length !== this.state.previousLength) {
+            if (event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight) {
+                let addItems = this.state.itemsToDisplay + 5
+                this.setState({
+                    itemsToDisplay: addItems,
+                    postsLoading: true,
+                    scrollHeight: event.target.scrollHeight,
+                    previousLength: this.state.posts.length
+                })
+
+                firebasePosts.limitToLast(addItems).once('value').then((snap)=> {
+                    const arrayPosts = convertArray(snap)
+                    this.setState({
+                        posts: reverseArray(arrayPosts),
+                        postsLoading: false,
+                    })
+                })
+            }
+        }
+    }
 
     errorCheck(tempElement) {
         let validateResult = validateFunction(tempElement)
@@ -104,29 +128,40 @@ class ViewPost extends Component {
                 this.setState({
                     disabled: false
                 })
-            }, 2000)
+            }, 1500)
         }
-
-        this.retrieveLastPosts()
     }
 
     render() {
+        const { disabled, postsLoading} = this.state
+
         return (
             <div className='textarea_block'>
                 <form>
                     <textarea
                         placeholder='post here'
                         onChange={(event)=> this.updateForm(event)}
-                        disabled={this.state.disabled}
+                        disabled={disabled}
                     ></textarea>
                     {showError(this.state.textarea)}
                     <div className='textarea_button'>                
-                        <Button bsStyle="primary" onClick={() => this.submitPost()}>Post</Button>
+                        <Button bsStyle="primary" 
+                        disabled={disabled}
+                        onClick={() => this.submitPost()}
+                        >
+                        {disabled? 'Posting..' : 'Post' }
+                        </Button>
                     </div>
                 </form>
                 <hr />
-                <div>
+                <div className='posts_div'
+                    onScroll={(event) => this.onScroll(event)}
+                >
+                    <hr />
                     {this.mapPosts(this.state.posts)}
+                    {postsLoading ? 
+                        <h2>Loading... </h2>      
+                    : null}
                 </div>
             </div>
         );
