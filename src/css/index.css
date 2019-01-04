@@ -1,7 +1,7 @@
 .error_label {
     color: #F44336;
     font-weight: 600;
-    margin: 10px 0px;
+    margin: 5px 0px;
 }
 
 .not_found_container {
@@ -14,4 +14,14 @@
     font-size: 90px;
     font-family: 'Righteous', cursive;
     color:black;
+}
+
+textarea {
+    width: 100%;
+    height: 80px;
+    font-size: 15px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    border: 1px solid #d1d1d1;
 }

@@ -1,16 +1,7 @@
 import React from 'react'
+import {showError} from './misc'
 
 const FormField = ({id, formData, change}) => {
-
-    const showError = () => {
-        let errorMessage =         
-        <div className='error_label'>
-            {
-                formData.validation && !formData.valid ? formData.validationMessage : null
-            }
-        </div>
-        return errorMessage
-    }
 
     const renderTemplate = () => {
         let formTemplate = null
@@ -33,39 +24,11 @@ const FormField = ({id, formData, change}) => {
                             
                             } }
                         ></input>
-                        {showError()}
+                        {showError(formData)}
                     </div>
                 )
             break;
-            
-            case('select'):
-                formTemplate = (
-                    <div>
-                        {formData.showLabel ?
-                            <div className='label_inputs'>
-                                {formData.config.label}
-                            </div>
-                        : null
-                        }
-                        <select
-                            value={formData.value}
-                            onChange={(event) => {
-                                change({event, id})                            
-                            }}
-                        >
-                            <option value=''>Select one</option>
-                            {
-                                formData.config.options.map((item) => (
-                                    <option key={item.key} value={item.key}>
-                                        {item.value}
-                                    </option>
-                                ))
-                            }
-                        </select>
-                        {showError()}
-                    </div>
-                )
-            break;                            
+                                        
             default:
                 formTemplate = null
 

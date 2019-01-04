@@ -1,0 +1,10 @@
+.textarea_block {
+    min-width: 400px;
+    position: relative;
+    display: inline-block;
+}
+
+.textarea_button {
+    display: block;
+    text-align: right;
+}
