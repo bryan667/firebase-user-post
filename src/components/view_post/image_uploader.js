@@ -5,9 +5,7 @@ import FileUploader from 'react-firebase-file-uploader'
 class ImageUploader extends Component {
 
     state = {
-        name:'',
         isUploading:false,
-        fileURL:''
     }
 
     handleUploadStart = () => {
@@ -23,45 +21,34 @@ class ImageUploader extends Component {
      }
 
     handleUploadSuccess = (filename) => {
-
-        this.setState({
-            name:filename,
-            isUploading:false
-        });
-
         firebase.storage().ref('images')
         .child(filename).getDownloadURL()
         .then( url => {
-            this.setState({fileURL: url })
+            this.props.passFile(filename, url)
+
+            this.setState({
+                isUploading:false,
+            })
         })
-
-        this.props.filename(filename)
-     }
-
-    static getDerivedStateFromProps(props,state){
-        if(props.defaultImg){
-            return state = {
-                name:props.defaultImgName,
-                fileURL:props.defaultImg
-            }
-        }
-        return null
     }
-
-
-    uploadAgain = () => {
+    
+    reset = () => {
         this.setState({
             name:'',
             isUploading:false,
             fileURL:''
         });
+    }
+
+    uploadAgain = () => {
+        this.reset()
         this.props.removeImage()
     }
 
     render() {
         return (
             <div>
-                { !this.state.fileURL ?
+                { !this.props.url ?
                     <div>
                         <div>{this.props.tag}</div>
                         <FileUploader
@@ -84,15 +71,15 @@ class ImageUploader extends Component {
                     </div>
                 :null
                 }
-                { this.state.fileURL ?
+                { this.props.url ?
                     <div className='image_preview'>
                         <div className="image_upload_container">
                             <img
                                 style={{
                                     width:'100%'
                                 }}
-                                src={this.state.fileURL}
-                                alt={this.state.name}
+                                src={this.props.url}
+                                alt={this.props.fileName}
                             />
                             <div className="remove" style={{cursor:'pointer'}} onClick={()=>this.uploadAgain()}>
                                 Remove

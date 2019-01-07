@@ -7,6 +7,12 @@ const Home = ({user, userData})=> {
         <div>
             {user!=null ? 
                 <div>
+                    {console.log(userData)}
+                    {userData.imageURL ?
+                        <img src={userData.imageURL} alt='awyis'></img>
+                    :
+                    null
+                    }
                     <div>{`Welcome ${userData.firstName} ${userData.lastName}!`}</div>           
                     <div>{`logged in as ${userData.email}`}</div>
                 </div>

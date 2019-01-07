@@ -8,7 +8,8 @@ export default function retrieveUserData(WrappedComponent) {
         state = {
             firstName: '',
             lastName: '',
-            email: ''
+            email: '',
+            imageURL: '',
         }
 
         componentDidMount() {
@@ -18,7 +19,8 @@ export default function retrieveUserData(WrappedComponent) {
                         this.setState({
                             firstName: data.val().firstName,
                             lastName: data.val().lastName,
-                            email: data.val().email
+                            email: data.val().email,
+                            imageURL: data.val().imageURL
                         })
                     });
                 })

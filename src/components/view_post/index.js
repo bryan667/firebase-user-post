@@ -14,12 +14,8 @@ class ViewPost extends Component {
         userData: '',
         disabled: false,
         image:{
-            value:'',
             fileName: '',
-            validation:{
-                required: false,
-            },
-            valid:false,
+            url: '',
         },
         textarea: {
             value: '',
@@ -43,6 +39,8 @@ class ViewPost extends Component {
     }
 
     componentDidMount() {
+        window.addEventListener('scroll', this.onScroll)
+
         firebasePosts.limitToLast(this.state.itemsToDisplay).on('value', ((snap)=> {
             const arrayPosts = convertArray(snap)
             document.querySelector('.posts_area').scrollTop = 0
@@ -53,12 +51,21 @@ class ViewPost extends Component {
         }))
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScroll);
+    }
+
     mapPosts = (posts) => (
         posts ?
             posts.map((items, i)=>(
                 <div key={i}>
                     <div className='posts_div'>
                         <h4><b>{`${items.fullName} (${items.email})`}</b></h4>
+                        {items.imageURL ? 
+                        <img src={items.imageURL} alt='wow much'></img>
+                        :
+                        null
+                        }
                         <p>{items.post}</p>
                         <b>{items.timeStamp}</b>
                     </div>
@@ -69,14 +76,16 @@ class ViewPost extends Component {
         null
     )
 
-    onScroll(event) {
+    onScroll =(event)=> {
+        let body = event.srcElement.body
+
         if (this.state.posts.length !== this.state.previousLength) {
-            if (event.target.scrollHeight - event.target.scrollTop <= event.target.clientHeight) {
+            if (body.scrollHeight - body.scrollTop <= body.clientHeight) {
                 let addItems = this.state.itemsToDisplay + 5
                 this.setState({
                     itemsToDisplay: addItems,
                     postsLoading: true,
-                    scrollHeight: event.target.scrollHeight,
+                    scrollHeight: body.scrollHeight,
                     previousLength: this.state.posts.length
                 })
 
@@ -110,16 +119,10 @@ class ViewPost extends Component {
     }
 
     submitPost =()=> {
-        const tempElement = this.state.textarea
-        this.errorCheck(tempElement)
+        const tempState = {...this.state}
+        this.errorCheck(tempState.textarea)
 
         if (this.state.formError === false) {
-
-            this.setState({
-                disabled: true
-            })
-
-            const tempState = this.state
             const date = new Date().toUTCString()
 
             const dataToSubmit = {
@@ -127,12 +130,23 @@ class ViewPost extends Component {
                 email: tempState.userData.email,
                 post: tempState.textarea.value,
                 timeStamp: date,
+                imageURL: tempState.image.url
             }
 
             firebasePosts.push(dataToSubmit).then(()=> {
                 alert("Message posted!")
             }).catch(e=>{
                 alert("Unable to post. Something went wrong.")
+            })
+
+            tempState.image.fileName = ''
+            tempState.image.url = ''
+            tempState.textarea.value = ''
+
+            this.setState({
+                image: tempState.image,
+                textarea: tempState.textarea,
+                disabled: true
             })
 
             setTimeout(()=> {
@@ -143,15 +157,15 @@ class ViewPost extends Component {
         }
     }
 
-    storeFilename(imageFilename) {
-        const imageData = this.state.image
+    storeFilename(imageFilename, imageURL) {
+        const imageData = {...this.state.image}
         imageData.fileName = imageFilename
+        imageData.url = imageURL
 
         this.setState({image: imageData})
     }
 
     removeImage = () => {
-
         firebase.storage().ref('images').child(this.state.image.fileName).delete().then(()=> {
             console.log(`file has been deleted: ${this.state.image.fileName}`)
         }).catch(function(error) {
@@ -159,12 +173,10 @@ class ViewPost extends Component {
         });
 
         const imageData = {...this.state.image}
-        imageData.value = '';
-        imageData.valid = false;
+        imageData.fileName = ''
+        imageData.url = ''
 
-        this.setState({
-            image: imageData
-        })
+        this.setState({image: imageData})
     }
 
     render() {
@@ -173,31 +185,32 @@ class ViewPost extends Component {
         return (
             <div className='textarea_block'>
                 <form>
-                    {console.log(this.state.image.fileName)}
                     <ImageUploader
                         tag={"Insert Image"}
-                        filename={(filename)=> this.storeFilename(filename)}
+                        fileName={this.state.image.fileName}
+                        url={this.state.image.url}
+                        passFile={(filename, url)=> this.storeFilename(filename, url)}
                         removeImage={()=> this.removeImage()}
+                        reset={()=> this.reset()}
                     />
                     <textarea
                         placeholder='post here'
+                        value={this.state.textarea.value}
                         onChange={(event)=> this.updateForm(event)}
                         disabled={disabled}
                     ></textarea>
                     {showError(this.state.textarea)}
                     <div className='textarea_button'>                
                         <Button bsStyle="primary" 
-                        disabled={disabled}
-                        onClick={() => this.submitPost()}
+                            disabled={disabled}
+                            onClick={() => this.submitPost()}
                         >
                         {disabled? 'Posting..' : 'Post' }
                         </Button>
                     </div>
                 </form>
                 <hr />
-                <div className='posts_area'
-                    onScroll={(event) => this.onScroll(event)}
-                >
+                <div className='posts_area'>
                     <hr />
                     {this.mapPosts(this.state.posts)}
                     {postsLoading ? 
