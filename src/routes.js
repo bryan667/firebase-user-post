@@ -12,9 +12,9 @@ const Routes = (props) => {
   return (
     <Layout {...props}>
       <Switch>
-        <PrivateRoutes {...props} path='/view_post/' exact component={ViewPost}></PrivateRoutes>
-        <PublicRoutes {...props} restricted={true} path='/sign_in' exact component={SignIn}></PublicRoutes>
         <PublicRoutes {...props} restricted={false} path='/' exact component={Home}></PublicRoutes>
+        <PublicRoutes {...props} restricted={true} path='/sign_in' exact component={SignIn}></PublicRoutes>
+        <PrivateRoutes {...props} path='/view_post/' exact component={ViewPost}></PrivateRoutes>
         <PublicRoutes {...props} restricted={false} component={NotFound404}></PublicRoutes>
       </Switch>
     </Layout>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import { Navbar, Nav, NavItem} from 'react-bootstrap'
+import { IndexLinkContainer, LinkContainer } from 'react-router-bootstrap'
 import {firebase} from '../../firebase-db'
 import '../../css/header.css'
 
@@ -15,32 +15,55 @@ const Header = (props) => {
 
     const privateButtons = () => (
         <React.Fragment>
-            <Link to={`/view_post`}>
-                <Button bsStyle="primary">View Posts</Button>
-            </Link>
-            <Button bsStyle="primary" onClick={()=> logoutHandler()}>Log Out</Button>
+            <LinkContainer to='/view_post'>
+                <NavItem eventKey={2}>
+                    View Posts
+                </NavItem>
+            </LinkContainer>
         </React.Fragment>
     )
 
     return (
         <div>
-            <Link to={`/`}>
-                <Button bsStyle="primary">
-                    Home
-                </Button>
-            </Link>
-            {props.user!=null ? 
-                    (privateButtons())
-                :
-            <Button bsStyle="primary">
-                <Link to={`/sign_in`} 
-                    style={{ textDecoration: 'none',
-                            color: '#FFF' 
-                    }}>
-                    Sign In
-                </Link>
-            </Button>
-            }
+            <Navbar inverse collapseOnSelect>
+            <Navbar.Header>
+                <IndexLinkContainer to='/'>
+                    <Navbar.Brand>
+                    </Navbar.Brand>
+                </IndexLinkContainer>
+                <Navbar.Toggle />
+            </Navbar.Header>
+                <Navbar.Collapse>
+                    <Nav>
+                        <IndexLinkContainer to='/'>
+                            <NavItem eventKey={1}>
+                                Home
+                            </NavItem>
+                        </IndexLinkContainer>
+
+                        {props.user!=null ? 
+                            (privateButtons())
+                            :
+                        null
+                        }
+                    </Nav>
+                {props.user!=null ? 
+                    <Nav pullRight>
+                        <NavItem eventKey={2} onClick={()=> logoutHandler()}>
+                            Log Out
+                        </NavItem>
+                    </Nav>
+                        :
+                    <Nav pullRight>
+                        <LinkContainer to='/sign_in'>
+                            <NavItem eventKey={2} onClick={()=> logoutHandler()}>
+                                Sign In
+                            </NavItem>
+                        </LinkContainer>
+                    </Nav>
+                }
+                </Navbar.Collapse>
+            </Navbar>
         </div>
     );
 };
