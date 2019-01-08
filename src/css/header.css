@@ -6,6 +6,7 @@ active-blue: #2e6da4;
 .navbar {
     font-family: Righteous;
     font-size: 18px;
+    margin: 0px;
 }
 
 .navbar-nav li:hover {
