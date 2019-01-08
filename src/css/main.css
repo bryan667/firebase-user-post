@@ -6,10 +6,14 @@
 }
 
 body {
+    position: absolute;
+    min-height: 100%;
+    min-width: 100%;
     font-family: Roboto;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 1.42857143;
     color: #333;
+    padding-bottom:40px; /* Height of the footer */
 }
 
 .error_label {
@@ -28,4 +32,10 @@ body {
     font-size: 90px;
     font-family: 'Righteous', cursive;
     color:black;
+}
+
+.spinner {
+    display: block;
+    padding-top: 33.33%;
+    margin: auto;
 }

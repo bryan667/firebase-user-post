@@ -1,0 +1,15 @@
+footer {
+    font-family: Roboto;
+    color: white;
+    text-align: center;
+    position: absolute;
+    font-size: 14px;
+    bottom:0;
+    width:100%;
+    height:40px;   /* Height of the footer */
+    background-color:#3171aa;
+}
+
+.footer_container {
+    margin-top: 10px;
+}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Button} from 'react-bootstrap'
+import ReactLoading from 'react-loading'
 import {validateFunction, showError, convertArray, reverseArray} from '../ui/misc'
 import ImageUploader from './image_uploader'
 import {firebase, firebasePosts} from '../../firebase-db'
@@ -80,7 +81,7 @@ class ViewPost extends Component {
         let body = event.srcElement.body
 
         if (this.state.posts.length !== this.state.previousLength) {
-            if (body.scrollHeight - body.scrollTop <= body.clientHeight) {
+            if (body.scrollHeight - body.scrollTop <= body.clientHeight + 5) {
                 let addItems = this.state.itemsToDisplay + 5
                 this.setState({
                     itemsToDisplay: addItems,
@@ -214,7 +215,14 @@ class ViewPost extends Component {
                     <hr />
                     {this.mapPosts(this.state.posts)}
                     {postsLoading ? 
-                        <h2>Loading... </h2>      
+                        <div>
+                            <ReactLoading 
+                            className='spinner'
+                            type={'spin'} 
+                            color={'blue'} 
+                            height={'10%'} 
+                            width={'10%'} />
+                        </div>      
                     : null}
                 </div>
             </div>

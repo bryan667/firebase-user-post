@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import ReactLoading from 'react-loading'
 import { firebase } from '../../firebase-db'
 import FileUploader from 'react-firebase-file-uploader'
 
@@ -64,11 +65,14 @@ class ImageUploader extends Component {
                     :null
                 }
                 { this.state.isUploading ?
-                    <div
-                        style={{textAlign:'center',margin:'30px 0'}}
-                    >
-                        <div>Loading...</div>
-                    </div>
+                    <div>
+                        <ReactLoading 
+                        className='spinner'
+                        type={'spin'} 
+                        color={'blue'} 
+                        height={'10%'} 
+                        width={'10%'} />
+                    </div> 
                 :null
                 }
                 { this.props.url ?
