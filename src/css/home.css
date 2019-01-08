@@ -23,7 +23,7 @@
 
 .home_container .info {
     color: white;
-    text-shadow: 4px 0px 3px #4d4d4d;
+    text-shadow: 1px 0px 4px #000000;
     font-family: Righteous;
     font-size: 22px;
     flex: 2 60%;
@@ -89,4 +89,12 @@
     margin: auto;
     width: 100%;
     height:100%;
+}
+
+.redirect_wrapper {
+    text-align: center;
+    padding-top: 25vh;
+    min-width: 570px;
+    min-height: 700px;
+    font-size: 80px;
 }

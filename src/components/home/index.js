@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactLoading from 'react-loading';
-import {Link} from 'react-router-dom'
+import NoUser from './no_user'
 import retrieveUserData from '../../high-order-comp/user_data'
 import '../../css/home.css'
 
@@ -51,10 +51,7 @@ const Home = ({user, userData})=> {
                     </div>
                 </div>
                 :
-                    <div>
-                        Please <Link to={`/sign_in`}>sign In</Link>
-                    </div>
-                    
+                    <NoUser />
                 }
         </div>
     );
