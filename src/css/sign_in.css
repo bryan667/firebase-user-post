@@ -1,0 +1,24 @@
+.signin_wrapper {
+    font-size: 16px;
+    padding-top: 50px;
+    width: 300px;
+    margin: auto;
+}
+
+.signin_wrapper form input {
+    width: 100%;
+}
+
+.signin_wrapper form button {    
+    width: 100%;
+    font-family: Righteous;
+    font-size: 20px;
+}
+
+.signin_wrapper form .textarea {
+    padding-top: 20px;
+}
+
+.signin_wrapper form textarea {
+    width: 100%;
+}

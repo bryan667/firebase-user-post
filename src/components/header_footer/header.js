@@ -16,7 +16,7 @@ const Header = (props) => {
     const privateButtons = () => (
         <React.Fragment>
             <LinkContainer to='/view_post'>
-                <NavItem eventKey={2}>
+                <NavItem>
                     View Posts
                 </NavItem>
             </LinkContainer>
@@ -36,7 +36,7 @@ const Header = (props) => {
                 <Navbar.Collapse>
                     <Nav>
                         <IndexLinkContainer to='/'>
-                            <NavItem eventKey={1}>
+                            <NavItem>
                                 Home
                             </NavItem>
                         </IndexLinkContainer>
@@ -49,14 +49,14 @@ const Header = (props) => {
                     </Nav>
                 {props.user!=null ? 
                     <Nav pullRight>
-                        <NavItem eventKey={2} onClick={()=> logoutHandler()}>
+                        <NavItem onClick={()=> logoutHandler()}>
                             Log Out
                         </NavItem>
                     </Nav>
                         :
                     <Nav pullRight>
                         <LinkContainer to='/sign_in'>
-                            <NavItem eventKey={2} onClick={()=> logoutHandler()}>
+                            <NavItem onClick={()=> logoutHandler()}>
                                 Sign In
                             </NavItem>
                         </LinkContainer>

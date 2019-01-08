@@ -7,7 +7,6 @@ const Home = ({user, userData})=> {
         <div>
             {user!=null ? 
                 <div>
-                    {console.log(userData)}
                     {userData.imageURL ?
                         <img src={userData.imageURL} alt='awyis'></img>
                     :

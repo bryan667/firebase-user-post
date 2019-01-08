@@ -3,6 +3,7 @@ import {firebase} from '../../firebase-db'
 import FormField from '../ui/formFields'
 import {validateFunction} from '../ui/misc'
 import {Button} from 'react-bootstrap'
+import '../../css/sign_in.css'
 
 class SignIn extends Component {
     state = {
@@ -69,11 +70,9 @@ class SignIn extends Component {
         let formIsValid = true
 
         //for in
-        for (let items in this.state.formData) {
-            
+        for (let items in this.state.formData) {            
             dataToSubmit[items] = this.state.formData[items].value
-            formIsValid = this.state.formData[items].valid
-            
+            formIsValid = this.state.formData[items].valid            
         }
 
         if (formIsValid) {
@@ -97,9 +96,13 @@ class SignIn extends Component {
     }
 
     render() {
+        const textarea=`test-users: 
+awyis@gmail.com / awyis2@gmail.com / doge@gmail.com
+
+pass: 123456`
         return (
-            <div className='container'>
-                <div className='signin_wrapper' style={{margin: '100px'}}>
+            <div>
+                <div className='signin_wrapper'>
                     <form onSubmit={(event) => this.submitForm(event)}>
                         <h2>Please Login</h2>
                         <FormField
@@ -112,9 +115,15 @@ class SignIn extends Component {
                                 formData={this.state.formData.password}
                                 change={(event) => this.updateForm(event)}
                         ></FormField>
-                        <p>**awyis@gmail.com / awyis2@gmail.com / doge@gmail.com**</p>
-                        <p>**123456**</p>
-                        <Button bsStyle="primary" onClick={(event) => this.submitForm(event)}>Login</Button>
+                        <Button bsStyle="primary"
+                            onClick={(event) => this.submitForm(event)}
+                            type='submit'
+                        >Login</Button>
+                        <div className='textarea'>
+                            <textarea rows='7' disabled>
+                                {textarea}
+                            </textarea>
+                        </div>
                     </form>
                     {this.state.formError ?
                     <div className='error_label'>

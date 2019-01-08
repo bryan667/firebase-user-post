@@ -1,11 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One|Righteous|Roboto');
+
 * {
     margin: 0;
     padding: 0;
 }
 
+body {
+    font-family: Roboto;
+    font-size: 16px;
+    line-height: 1.42857143;
+    color: #333;
+}
+
 .error_label {
     color: #F44336;
-    font-weight: 600;
+    font-weight: 550;
     margin: 5px 0px;
 }
 
@@ -19,14 +28,4 @@
     font-size: 90px;
     font-family: 'Righteous', cursive;
     color:black;
-}
-
-textarea {
-    width: 100%;
-    height: 80px;
-    font-size: 15px;
-    padding: 10px;
-    box-sizing: border-box;
-    margin-top: 5px;
-    border: 1px solid #d1d1d1;
 }

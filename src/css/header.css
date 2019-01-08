@@ -1,3 +1,32 @@
+/* colors:  
+blue: #337ab7;
+active-blue: #2e6da4;
+*/
+.navbar {
+    font-family: Righteous;
+    font-size: 22px;
+}
+
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:focus, .navbar-inverse .navbar-nav>.active>a:hover {
+    color: #fff;
+    background-color: #2e6da4;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: #fff;
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-color:  #337ab7;
+    background-color: #337ab7;
+}
+
+.navbar-inverse {
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+
 @media (min-width: 1400px) {
     .container {
         width: 1370px;
