@@ -120,8 +120,7 @@ pass: 123456`
                             type='submit'
                         >Login</Button>
                         <div className='textarea'>
-                            <textarea rows='7' disabled>
-                                {textarea}
+                            <textarea rows='7' value={textarea} disabled>
                             </textarea>
                         </div>
                     </form>

@@ -5,12 +5,43 @@
     padding: 0;
 }
 
+@media (min-width: 1px) {
+    body {
+      /* Minimum font size */
+      font-size: 6px
+    }
+
+    h1 {
+        font-size: 17px
+    }
+}
+
+@media (min-width: 700px) {
+    body {
+      /* Minimum font size */
+      font-size: 8px
+    }
+
+    h1 {
+        font-size: 22px
+    }
+}
+  @media (min-width: 1200px) {
+    body {
+      /* Maximum font size */
+      font-size: 14px
+    }
+
+    h1 {
+      font-size: 30px
+    }
+}
+
 body {
     position: absolute;
     min-height: 100vh;
     min-width: 100vw;
     font-family: Roboto;
-    font-size: 14px;
     line-height: 1.42857143;
     color: rgb(29, 29, 29);
     padding-bottom: 40px; /* Height of the footer */

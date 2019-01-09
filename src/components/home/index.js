@@ -20,7 +20,7 @@ const Home = ({user, userData})=> {
                                     </div>
                                 </div>
                                 <div className='info'>
-                                    <h2>{`Welcome ${userData.firstName} ${userData.lastName}!`}</h2>           
+                                    <h1>{`Welcome ${userData.firstName} ${userData.lastName}!`}</h1>           
                                     <div>{`logged in as ${userData.email}`}</div>
                                 </div>
 
