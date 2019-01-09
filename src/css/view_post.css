@@ -1,51 +1,13 @@
+.textarea_block {
+    margin: auto;
+    min-width: 360px;
+    width: 50%;
+}
+
 .textarea_block textarea {
     width: 100%;
-    height: 80px;
-    padding: 10px;
-    box-sizing: border-box;
-    margin-top: 5px;
-    border: 1px solid #d1d1d1;
 }
 
-.textarea_block {
-    width: 1000px;
-    min-width: 1000px;
-    position: relative;
-    display: inline-block;
-}
-
-.textarea_button {
-    display: block;
-    text-align: right;
-}
-
-.posts_area {
-    border-style: solid;
-    border-color: rgb(228, 228, 228);
-    border-width: 1px;
-}
-
-.posts_div {
-    margin-left: auto;
-    margin-right: auto;
-    text-align: justify;
-    width: 60em;
-}
-
-.image_preview {
-    width: 30rem;
-}
-
-.image_upload_container {
-    position: relative;
-}
-
-.image_upload_container .remove {
-    top: 0;
-    position: absolute;
-    right: 0;
-    background: #98c6e9;
-    color: #ffffff;
-    border: 1px solid white;
-    padding: 10px;
+.posts_div img {
+    width: 100%;
 }
