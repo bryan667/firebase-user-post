@@ -184,8 +184,8 @@ class ViewPost extends Component {
         const { disabled, postsLoading} = this.state
 
         return (
-            <div className='textarea_block'>
-                <form>
+            <div className='post_block'>
+                <form className='form_block'>
                     <ImageUploader
                         tag={"Insert Image"}
                         fileName={this.state.image.fileName}
@@ -194,23 +194,24 @@ class ViewPost extends Component {
                         removeImage={()=> this.removeImage()}
                         reset={()=> this.reset()}
                     />
-                    <textarea
-                        placeholder='post here'
-                        value={this.state.textarea.value}
-                        onChange={(event)=> this.updateForm(event)}
-                        disabled={disabled}
-                    ></textarea>
+                    <div className='textarea_block'>
+                        <textarea
+                            placeholder='post here'
+                            value={this.state.textarea.value}
+                            onChange={(event)=> this.updateForm(event)}
+                            disabled={disabled}
+                        ></textarea>
                     {showError(this.state.textarea)}
-                    <div className='textarea_button'>                
+                    <div className='button_wrap'>
                         <Button bsStyle="primary" 
                             disabled={disabled}
                             onClick={() => this.submitPost()}
                         >
-                        {disabled? 'Posting..' : 'Post' }
+                            {disabled? 'Posting..' : 'Post' }
                         </Button>
                     </div>
+                    </div>
                 </form>
-                <hr />
                 <div className='posts_area'>
                     <hr />
                     {this.mapPosts(this.state.posts)}

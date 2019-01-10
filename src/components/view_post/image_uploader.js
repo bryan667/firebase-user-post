@@ -50,7 +50,7 @@ class ImageUploader extends Component {
         return (
             <div>
                 { !this.props.url ?
-                    <div>
+                    <div className='image_up'>
                         <div>{this.props.tag}</div>
                         <FileUploader
                             accept="image/*"
@@ -77,15 +77,12 @@ class ImageUploader extends Component {
                 }
                 { this.props.url ?
                     <div className='image_preview'>
-                        <div className="image_upload_container">
+                        <div className="image_upload_wrapper">
                             <img
-                                style={{
-                                    width:'100%'
-                                }}
                                 src={this.props.url}
                                 alt={this.props.fileName}
                             />
-                            <div className="remove" style={{cursor:'pointer'}} onClick={()=>this.uploadAgain()}>
+                            <div className="remove" onClick={()=>this.uploadAgain()}>
                                 Remove
                             </div>
                         </div>

@@ -54,12 +54,6 @@ body {
     background-size: 1800px 1000px;
 } */
 
-.error_label {
-    color: #F44336;
-    font-weight: 550;
-    margin: 5px 0px;
-}
-
 .not_found_container {
     text-align: center;
     margin-top: 96px;
@@ -74,4 +68,9 @@ body {
 .spinner {
     display: block;
     margin: auto;
+}
+
+.error_label {
+    color: #F44336;
+    font-weight: 550;
 }
