@@ -1,39 +1,21 @@
 @import url('https://fonts.googleapis.com/css?family=Fredoka+One|Righteous|Roboto');
 
-* {
+* , h1, h2, h3, h4, h5, h6, p {
     margin: 0;
     padding: 0;
 }
 
 @media (min-width: 1px) {
-    body {
-      /* Minimum font size */
-      font-size: 6px
-    }
-
     h1 {
-        font-size: 17px
+        font-size: 30px;
     }
-}
+    
+    h2 {
+        font-size: 20px;
+    }
 
-@media (min-width: 700px) {
     body {
-      /* Minimum font size */
-      font-size: 8px
-    }
-
-    h1 {
-        font-size: 22px
-    }
-}
-  @media (min-width: 1200px) {
-    body {
-      /* Maximum font size */
-      font-size: 14px
-    }
-
-    h1 {
-      font-size: 30px
+        font-size: 16px;
     }
 }
 
@@ -66,7 +48,7 @@ body {
 }
 
 .spinner {
-    display: block;
+    display: block;    
     margin: auto;
 }
 

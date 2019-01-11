@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import {Button} from 'react-bootstrap'
+import {Button, Glyphicon } from 'react-bootstrap'
 import ReactLoading from 'react-loading'
 import {validateFunction, showError, convertArray, reverseArray} from '../ui/misc'
+import EditModal from './edit_modal'
+import ImageModal from './image_modal'
 import ImageUploader from './image_uploader'
+import UserImage from './user_image'
 import {firebase, firebasePosts} from '../../firebase-db'
 import retrieveUserData from '../../high-order-comp/user_data'
 import '../../css/view_post.css'
@@ -14,6 +17,12 @@ class ViewPost extends Component {
         formError: true,
         userData: '',
         disabled: false,
+        reload: false,
+        postsLoading: true,
+        previousLength: 0,
+        scrollHeight: 0,
+        itemsToDisplay: 10,
+        posts: [],
         image:{
             fileName: '',
             url: '',
@@ -26,11 +35,15 @@ class ViewPost extends Component {
             valid: false,
             validationMessage: '',
         },
-        posts: [],
-        previousLength: 0,
-        scrollHeight: 0,
-        itemsToDisplay: 10,
-        postsLoading: true,
+        imageModal: {
+            src: '',
+            display: 'none',
+        },
+        editModal: {
+            show: false,
+            id: '',
+            post: ''
+        }
     }
 
     static getDerivedStateFromProps(props,state) {
@@ -44,7 +57,7 @@ class ViewPost extends Component {
 
         firebasePosts.limitToLast(this.state.itemsToDisplay).on('value', ((snap)=> {
             const arrayPosts = convertArray(snap)
-            document.querySelector('.posts_area').scrollTop = 0
+
             this.setState({
                 posts: reverseArray(arrayPosts),
                 postsLoading: false
@@ -61,21 +74,75 @@ class ViewPost extends Component {
             posts.map((items, i)=>(
                 <div key={i}>
                     <div className='posts_div'>
-                        <h4><b>{`${items.fullName} (${items.email})`}</b></h4>
-                        {items.imageURL ? 
-                        <img src={items.imageURL} alt='wow much'></img>
-                        :
-                        null
-                        }
+                        <div className='user_detail'>
+                            {!this.state.reload ? 
+                                <UserImage 
+                                    email={items.email}
+                                />
+                            :
+                            <div className='img_profile'>
+                                <div className='spinner_wrap'>
+                                    <ReactLoading 
+                                    className='spinner'
+                                    type={'spin'} 
+                                    color={'blue'} 
+                                    height={'10%'} 
+                                    width={'10%'} />
+                                </div>
+                            </div>
+                            }
+                            <div className='right'>
+                                <h2 className='full_name'>{`${items.fullName} (${items.email})`}</h2>
+                                <div className='timestamp'>{items.timeStamp}</div>
+                            </div>
+                            <div className='edit_wrap'>
+                                <Button onClick={()=> this.editPost(items)}>
+                                    <Glyphicon glyph="edit"/> 
+                                </Button>
+                            </div>
+                        </div>
                         <p>{items.post}</p>
-                        <b>{items.timeStamp}</b>
+                        {items.imageURL ? 
+                            <div className='img_post_wrapper'>
+                                <img src={items.imageURL}
+                                alt='wow much'
+                                className='img_post'
+                                onClick={(event) => this.feedModal(event)}
+                                ></img>
+                            </div>
+                            :
+                            null
+                        }
                     </div>
-                    <hr />
                 </div>
             ))
         :
         null
     )
+
+    editPost = (post) => {
+        this.setState({
+            editModal: {
+                id: post.id,
+                post: post.post,
+                show: true,
+            }
+        })
+    }
+
+    closePost = () => {
+        this.setState({
+            editModal: {
+                id: '',
+                post: '',
+                show: false,
+            }
+        })
+    }
+
+    savePost = () => {
+
+    }
 
     onScroll =(event)=> {
         let body = event.srcElement.body
@@ -147,8 +214,15 @@ class ViewPost extends Component {
             this.setState({
                 image: tempState.image,
                 textarea: tempState.textarea,
-                disabled: true
+                disabled: true,
+                reload: true,
             })
+
+            setTimeout(()=> {
+                this.setState({
+                    reload: false
+                })
+            }, 1)
 
             setTimeout(()=> {
                 this.setState({
@@ -180,51 +254,84 @@ class ViewPost extends Component {
         this.setState({image: imageData})
     }
 
+    feedModal = (event) => {
+        const tempModal = this.state.imageModal
+        tempModal.src = event.target.src
+        tempModal.display = 'block'
+        this.setState({
+            imageModal: tempModal
+        })
+    }
+
+    closeModal = () => {
+        const tempModal = this.state.imageModal
+        tempModal.src = ''
+        tempModal.display = 'none'
+        this.setState({
+            imageModal: tempModal
+        })
+    }
+
     render() {
-        const { disabled, postsLoading} = this.state
+        const { disabled, postsLoading, imageModal, editModal} = this.state
 
         return (
-            <div className='post_block'>
-                <form className='form_block'>
-                    <ImageUploader
-                        tag={"Insert Image"}
-                        fileName={this.state.image.fileName}
-                        url={this.state.image.url}
-                        passFile={(filename, url)=> this.storeFilename(filename, url)}
-                        removeImage={()=> this.removeImage()}
-                        reset={()=> this.reset()}
+            <div className='posts_block'>
+                    <ImageModal 
+                        src={imageModal.src}
+                        display={imageModal.display}    
+                        closeModal={()=> this.closeModal()}
                     />
-                    <div className='textarea_block'>
-                        <textarea
-                            placeholder='post here'
-                            value={this.state.textarea.value}
-                            onChange={(event)=> this.updateForm(event)}
-                            disabled={disabled}
-                        ></textarea>
-                    {showError(this.state.textarea)}
-                    <div className='button_wrap'>
-                        <Button bsStyle="primary" 
-                            disabled={disabled}
-                            onClick={() => this.submitPost()}
-                        >
-                            {disabled? 'Posting..' : 'Post' }
-                        </Button>
+                    <EditModal 
+                        id={editModal.id}
+                        post={editModal.post}
+                        editPost={editModal.show}
+                        closePost={this.closePost}
+                        savePost={this.savePost}
+                    />
+                <div className='top'>
+                    <form className='form_block'>
+                        <ImageUploader
+                            tag={"Insert Image"}
+                            fileName={this.state.image.fileName}
+                            url={this.state.image.url}
+                            passFile={(filename, url)=> this.storeFilename(filename, url)}
+                            removeImage={()=> this.removeImage()}
+                            reset={()=> this.reset()}
+                        />
+                        <div className='textarea_block'>
+                            <textarea
+                                placeholder='post here'
+                                value={this.state.textarea.value}
+                                onChange={(event)=> this.updateForm(event)}
+                                disabled={disabled}
+                            ></textarea>
+                        {showError(this.state.textarea)}
+                        <div className='button_wrap'>
+                            <Button bsStyle="primary" 
+                                disabled={disabled}
+                                onClick={() => this.submitPost()}
+                            >
+                                {disabled? 'Posting..' : 'Post' }
+                            </Button>
+                        </div>
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <div className='posts_area'>
+                        {this.mapPosts(this.state.posts)}
+                        {postsLoading ? 
+                            <div>
+                                <ReactLoading 
+                                className='spinner'
+                                type={'spin'} 
+                                color={'blue'} 
+                                height={'10%'} 
+                                width={'10%'} />
+                            </div>      
+                        : null}
                     </div>
-                    </div>
-                </form>
-                <div className='posts_area'>
-                    <hr />
-                    {this.mapPosts(this.state.posts)}
-                    {postsLoading ? 
-                        <div>
-                            <ReactLoading 
-                            className='spinner'
-                            type={'spin'} 
-                            color={'blue'} 
-                            height={'10%'} 
-                            width={'10%'} />
-                        </div>      
-                    : null}
                 </div>
             </div>
         );
