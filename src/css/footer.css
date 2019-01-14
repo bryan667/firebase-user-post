@@ -1,7 +1,7 @@
 footer {
     font-family: 'Roboto', sans-serif;
     color: white;
-    font-size: 14px;
+    font-size: 1.4rem;
     background-color:#3171aa;
     width: 100%;
 }
@@ -30,7 +30,7 @@ footer a {
 
 footer .glyph {
     flex: 1;
-    font-size: 100px;
+    font-size: 10.0rem;
 }
 
 footer .contact {

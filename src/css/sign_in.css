@@ -12,7 +12,7 @@
 .signin_wrapper form button {    
     width: 100%;
     font-family: Righteous;
-    font-size: 20px;
+    font-size: 2.0rem;
 }
 
 .signin_wrapper form .textarea {

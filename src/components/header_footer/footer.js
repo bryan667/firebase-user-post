@@ -22,6 +22,14 @@ const Footer = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                     >Brogrammers!</a><br />
+                    <a href='https://github.com/bryan667' 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >Github</a><br />  
+                    <a href='https://www.freecodecamp.org/' 
+                        target="_blank"
+                        rel="noopener noreferrer"    
+                    >FreeCodeCamp</a><br />
                     <a href='https://www.facebook.com/groups/584419352008720/' 
                         target="_blank"
                         rel="noopener noreferrer"    
@@ -30,10 +38,6 @@ const Footer = () => {
                         target="_blank"
                         rel="noopener noreferrer"    
                     >FreeCodeCamp Manila</a><br />
-                    <a href='https://github.com/bryan667' 
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >Github</a><br />                    
                     <a href='https://www.facebook.com' 
                         target="_blank"
                         rel="noopener noreferrer"    
