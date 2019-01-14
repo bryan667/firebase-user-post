@@ -1,16 +1,24 @@
 import React from 'react';
+import {showError} from '../ui/misc'
 import {Modal, Button} from 'react-bootstrap'
+import '../../css/edit_modal.css'
 
-const EditModal = ({id, post, editPost, closePost}) => {
+const EditModal = ({post, onChange, closePost, savePost}) => {
     return (
-        <Modal show={editPost} onHide={()=> closePost()}>
+        <Modal show={post.show} onHide={()=> closePost()}>
             <Modal.Body>
-                <div>{`postID: ${id}`}</div>
-                <textarea defaultValue={post}></textarea>
+                <div>{`postID: ${post.id}`}</div>
+                <textarea 
+                    id='editModal'
+                    onChange={(e)=> onChange(e)}
+                    className={'textarea_edit'}
+                    value={post.value}
+                ></textarea>
+                {showError(post)}
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={()=> closePost()}>Cancel</Button>
-                <Button onClick={()=> closePost()} 
+                <Button onClick={()=> savePost()} 
                     bsStyle="primary">
                 Save Post
                 </Button>

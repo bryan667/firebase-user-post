@@ -10,7 +10,7 @@ class UserImage extends Component {
     }
 
     componentDidMount(){
-        firebaseUsers.orderByChild('email').equalTo(this.props.email).on('value', ((snap)=> {
+        firebaseUsers.orderByChild('email').equalTo(this.props.email).once('value', ((snap)=> {
             const data = convertArray(snap)
             this.setState({
                 imageURL: data[0].imageURL

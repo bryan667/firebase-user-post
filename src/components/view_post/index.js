@@ -4,6 +4,7 @@ import ReactLoading from 'react-loading'
 import {validateFunction, showError, convertArray, reverseArray} from '../ui/misc'
 import EditModal from './edit_modal'
 import ImageModal from './image_modal'
+import RemoveModal from './remove_modal'
 import ImageUploader from './image_uploader'
 import UserImage from './user_image'
 import {firebase, firebasePosts} from '../../firebase-db'
@@ -27,22 +28,34 @@ class ViewPost extends Component {
             fileName: '',
             url: '',
         },
-        textarea: {
+        imageModal: {
+            src: '',
+            display: 'none',
+        },
+        editModal: {
+            id: '',
             value: '',
+            show: false,
+            index: '',
             validation: {
                 required: true,
             },
             valid: false,
             validationMessage: '',
         },
-        imageModal: {
-            src: '',
-            display: 'none',
-        },
-        editModal: {
-            show: false,
+        removeModal: {
             id: '',
-            post: ''
+            value: '',
+            show: false,
+            index: '',
+        },
+        textarea1: {
+            value: '',
+            validation: {
+                required: true,
+            },
+            valid: false,
+            validationMessage: '',
         }
     }
 
@@ -69,79 +82,76 @@ class ViewPost extends Component {
         window.removeEventListener('scroll', this.onScroll);
     }
 
-    mapPosts = (posts) => (
-        posts ?
-            posts.map((items, i)=>(
-                <div key={i}>
-                    <div className='posts_div'>
-                        <div className='user_detail'>
-                            {!this.state.reload ? 
-                                <UserImage 
-                                    email={items.email}
-                                />
-                            :
-                            <div className='img_profile'>
-                                <div className='spinner_wrap'>
-                                    <ReactLoading 
-                                    className='spinner'
-                                    type={'spin'} 
-                                    color={'blue'} 
-                                    height={'10%'} 
-                                    width={'10%'} />
-                                </div>
-                            </div>
-                            }
-                            <div className='right'>
-                                <h2 className='full_name'>{`${items.fullName} (${items.email})`}</h2>
-                                <div className='timestamp'>{items.timeStamp}</div>
-                            </div>
-                            <div className='edit_wrap'>
-                                <Button onClick={()=> this.editPost(items)}>
-                                    <Glyphicon glyph="edit"/> 
-                                </Button>
-                            </div>
-                        </div>
-                        <p>{items.post}</p>
-                        {items.imageURL ? 
-                            <div className='img_post_wrapper'>
-                                <img src={items.imageURL}
-                                alt='wow much'
-                                className='img_post'
-                                onClick={(event) => this.feedModal(event)}
-                                ></img>
-                            </div>
-                            :
-                            null
-                        }
-                    </div>
-                </div>
-            ))
-        :
-        null
-    )
+    editPost = (post, index, modalName) => {
+        const tempElement = {...this.state[modalName]}
+        tempElement.id = post.id
+        tempElement.value = post.post        
+        tempElement.index = index
+        tempElement.show = true
 
-    editPost = (post) => {
         this.setState({
-            editModal: {
-                id: post.id,
-                post: post.post,
-                show: true,
-            }
+            [modalName]: tempElement
+        })
+
+        if (modalName !== 'removeModal' ) {
+            this.errorCheck(tempElement)
+        }
+    }
+
+    closePost = (modalName) => {
+        const tempElement = {...this.state[modalName]}
+        tempElement.id = ''
+        tempElement.value = ''
+        tempElement.index = ''
+        tempElement.show = false
+
+        this.setState({
+            [modalName]: tempElement
         })
     }
 
-    closePost = () => {
-        this.setState({
-            editModal: {
-                id: '',
-                post: '',
-                show: false,
-            }
-        })
+    deletePost = () => {
+        const tempElement = {...this.state.removeModal}
+        const tempPost = this.state.posts
+        firebasePosts.child(tempElement.id).remove().then(()=>{
+            tempElement.show = false
+            tempPost.splice(tempElement.index, 1)
+
+            this.setState({ 
+                posts: tempPost,
+                removeModal: tempElement,
+                reload: true
+            })
+
+            setTimeout(()=> {
+                this.setState({
+                    reload: false
+                })
+            }, 0)
+        })        
     }
 
     savePost = () => {
+        const tempElement = {...this.state.editModal}
+        this.errorCheck(tempElement)
 
+        if (this.state.formError === false) {
+            firebasePosts.orderByKey().equalTo(tempElement.id).once('value', ((snap)=> {
+                const tempArr=[]
+                snap.forEach((child)=> {
+                    tempArr.push(child)
+                });
+                tempArr[0].ref.update({post: tempElement.value})
+            })).then(()=> {
+                const tempPost = this.state.posts
+                tempPost[tempElement.index].post = tempElement.value
+
+                this.setState({ 
+                    post: tempPost
+                })
+                this.closePost('editModal')
+            })
+        }
     }
 
     onScroll =(event)=> {
@@ -174,21 +184,20 @@ class ViewPost extends Component {
         tempElement.validationMessage = validateResult[1]
 
         this.setState({
-            textarea: tempElement,
+            [tempElement.id]: tempElement,
             formError: !tempElement.valid
         })
     }
 
     updateForm = (event) => {
-        const tempElement = this.state.textarea
+        const tempElement = this.state[event.target.id]
         tempElement.value = event.target.value
-
         this.errorCheck(tempElement)
     }
 
     submitPost =()=> {
         const tempState = {...this.state}
-        this.errorCheck(tempState.textarea)
+        this.errorCheck(tempState.textarea1)
 
         if (this.state.formError === false) {
             const date = new Date().toUTCString()
@@ -196,24 +205,24 @@ class ViewPost extends Component {
             const dataToSubmit = {
                 fullName: `${tempState.userData.firstName} ${tempState.userData.lastName}`,
                 email: tempState.userData.email,
-                post: tempState.textarea.value,
+                post: tempState.textarea1.value,
                 timeStamp: date,
                 imageURL: tempState.image.url
             }
 
             firebasePosts.push(dataToSubmit).then(()=> {
-                alert("Message posted!")
+                console.log("Message posted!")
             }).catch(e=>{
-                alert("Unable to post. Something went wrong.")
+                console.log("Unable to post. Something went wrong.")
             })
 
             tempState.image.fileName = ''
             tempState.image.url = ''
-            tempState.textarea.value = ''
+            tempState.textarea1.value = ''
 
             this.setState({
                 image: tempState.image,
-                textarea: tempState.textarea,
+                textarea1: tempState.textarea1,
                 disabled: true,
                 reload: true,
             })
@@ -222,7 +231,7 @@ class ViewPost extends Component {
                 this.setState({
                     reload: false
                 })
-            }, 1)
+            }, 0)
 
             setTimeout(()=> {
                 this.setState({
@@ -272,8 +281,66 @@ class ViewPost extends Component {
         })
     }
 
+    mapPosts = (posts) => (
+        posts ?
+            posts.map((items, i)=>(
+                <div key={i}>
+                    <div className='posts_div'>
+                        <div className='user_detail'>
+                            {!this.state.reload ? 
+                                <UserImage 
+                                    email={items.email}
+                                />
+                            :
+                            <div className='img_profile'>
+                                <div className='spinner_wrap'>
+                                    <ReactLoading 
+                                    className='spinner'
+                                    type={'spin'} 
+                                    color={'blue'} 
+                                    height={'10%'} 
+                                    width={'10%'} />
+                                </div>
+                            </div>
+                            }
+                            <div className='right'>
+                                <h2 className='full_name'>{`${items.fullName} (${items.email})`}</h2>
+                                <div className='timestamp'>{items.timeStamp}</div>
+                            </div>
+                            {(items.email === this.state.userData.email) ?
+                                <div className='edit_wrap'>
+                                    <Button onClick={()=> this.editPost(items, i, 'editModal')}>
+                                        <Glyphicon glyph="edit"/> 
+                                    </Button>
+                                    <Button onClick={()=> this.editPost(items, i, 'removeModal')}>
+                                        <Glyphicon glyph="remove"/> 
+                                    </Button>
+                                </div>
+                                :
+                                null
+                            }
+                        </div>
+                        <p>{items.post}</p>
+                        {items.imageURL ? 
+                            <div className='img_post_wrapper'>
+                                <img src={items.imageURL}
+                                alt='wow much'
+                                className='img_post'
+                                onClick={(event) => this.feedModal(event)}
+                                ></img>
+                            </div>
+                            :
+                            null
+                        }
+                    </div>
+                </div>
+            ))
+        :
+        null
+    )
+
     render() {
-        const { disabled, postsLoading, imageModal, editModal} = this.state
+        const { disabled, postsLoading, imageModal, editModal, removeModal} = this.state
 
         return (
             <div className='posts_block'>
@@ -283,11 +350,15 @@ class ViewPost extends Component {
                         closeModal={()=> this.closeModal()}
                     />
                     <EditModal 
-                        id={editModal.id}
-                        post={editModal.post}
-                        editPost={editModal.show}
-                        closePost={this.closePost}
-                        savePost={this.savePost}
+                        post={editModal}
+                        onChange={(event)=> this.updateForm(event)}
+                        closePost={()=> this.closePost('editModal')}
+                        savePost={()=> this.savePost()}
+                    />
+                    <RemoveModal 
+                        post={removeModal}
+                        deletePost={()=> this.deletePost()}
+                        closePost={()=> this.closePost('removeModal')}
                     />
                 <div className='top'>
                     <form className='form_block'>
@@ -301,12 +372,13 @@ class ViewPost extends Component {
                         />
                         <div className='textarea_block'>
                             <textarea
+                                id='textarea1'
                                 placeholder='post here'
-                                value={this.state.textarea.value}
+                                value={this.state.textarea1.value}
                                 onChange={(event)=> this.updateForm(event)}
                                 disabled={disabled}
                             ></textarea>
-                        {showError(this.state.textarea)}
+                        {showError(this.state.textarea1)}
                         <div className='button_wrap'>
                             <Button bsStyle="primary" 
                                 disabled={disabled}

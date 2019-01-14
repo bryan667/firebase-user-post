@@ -14,7 +14,7 @@ export default function retrieveUserData(WrappedComponent) {
 
         componentDidMount() {
             if (this.props.user!=null) { 
-                firebaseUsers.orderByChild('email').equalTo(this.props.user.email).on('value', (snap)=> {
+                firebaseUsers.orderByChild('email').equalTo(this.props.user.email).once('value', (snap)=> {
                     snap.forEach((data)=> {
                         this.setState({
                             firstName: data.val().firstName,

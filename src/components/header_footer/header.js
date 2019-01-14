@@ -9,7 +9,7 @@ const Header = (props) => {
         firebase.auth().signOut().then(()=> {
             console.log('Log out successful')
         }, (error) => {
-            console.log('Error logging out')
+            console.log(`Error logging out: ${error}`)
         })
     }
 
