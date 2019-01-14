@@ -43,7 +43,7 @@
 /* Add Animation */
 .modal-content, #caption {  
   animation-name: zoom;
-  animation-duration: 0.5s;
+  animation-duration: 0.2s;
 }
 
 @keyframes zoom {

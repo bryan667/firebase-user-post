@@ -1,3 +1,8 @@
+h2 {
+  margin: 0;
+  padding: 0;
+}
+
 .posts_block {
     margin: auto;
     padding: 10px;
@@ -138,4 +143,8 @@
 
 .modal-backdrop {
     z-index: auto;
+}
+
+.posts_area .post_loading {
+    height: 30vh;
 }

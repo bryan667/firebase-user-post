@@ -394,7 +394,7 @@ class ViewPost extends Component {
                     <div className='posts_area'>
                         {this.mapPosts(this.state.posts)}
                         {postsLoading ? 
-                            <div>
+                            <div className='post_loading'>
                                 <ReactLoading 
                                 className='spinner'
                                 type={'spin'} 

@@ -1,10 +1,18 @@
 import React from 'react';
 import {Link} from 'react-router-dom'
+import '../../css/redirect.css'
 
 const NoUser = () => {
     return (
         <div className='redirect_wrapper'>
-            Please <Link to={`/sign_in`}>sign in</Link>
+            <div className='back_img'>
+                <div className='block'>
+                    <p>The Wall of Pictures and Stuff</p>
+                    <p>Post pictures and stuff. Join the club!</p>
+                    <p>Please <Link to={`/sign_in`}>sign in</Link></p>
+                    <p>New to the group? Sign up <Link to={`/#`}>here</Link></p>
+                </div>
+            </div>
         </div>
     );
 };

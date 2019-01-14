@@ -49,9 +49,11 @@ const Header = (props) => {
                     </Nav>
                 {props.user!=null ? 
                     <Nav pullRight>
-                        <NavItem onClick={()=> logoutHandler()}>
-                            Log Out
-                        </NavItem>
+                        <LinkContainer to='/sign_in'>
+                            <NavItem onClick={()=> logoutHandler()}>
+                                Log Out
+                            </NavItem>
+                        </LinkContainer>
                     </Nav>
                         :
                     <Nav pullRight>

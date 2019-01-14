@@ -38,7 +38,10 @@ class SignIn extends Component {
                 },
                 valid: false,
                 validationMessage: ''
-            }
+            },
+        },
+        textarea: {
+            value: `test-users:\nawyis@gmail.com /\nawyis2@gmail.com /\ndoge@gmail.com /\ncate@gmail.com /\n\npassword: 123456`,
         }
     }
 
@@ -75,6 +78,8 @@ class SignIn extends Component {
             formIsValid = this.state.formData[items].valid            
         }
 
+        console.log(dataToSubmit)
+
         if (formIsValid) {
             firebase.auth()
             .signInWithEmailAndPassword(
@@ -96,10 +101,6 @@ class SignIn extends Component {
     }
 
     render() {
-        const textarea=`test-users: 
-awyis@gmail.com / awyis2@gmail.com / doge@gmail.com
-
-pass: 123456`
         return (
             <div>
                 <div className='signin_wrapper'>
@@ -120,7 +121,10 @@ pass: 123456`
                             type='submit'
                         >Login</Button>
                         <div className='textarea'>
-                            <textarea rows='7' value={textarea} disabled>
+                            <textarea rows='7' 
+                                value={this.state.textarea.value}
+                                readOnly
+                            >
                             </textarea>
                         </div>
                     </form>

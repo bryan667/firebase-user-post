@@ -1,8 +1,15 @@
-@import url('https://fonts.googleapis.com/css?family=Fredoka+One|Righteous|Roboto');
+@import url('https://fonts.googleapis.com/css?family=Fredoka+One|Righteous|Roboto|Rubik');
 
-* , h1, h2, h3, h4, h5, h6, p {
-    margin: 0;
-    padding: 0;
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+  /*10/16px - of the browser's set font size */
 }
 
 @media (min-width: 1px) {
@@ -26,7 +33,6 @@ body {
     font-family: "Roboto", "Times New Roman";
     line-height: 1.42857143;
     color: rgb(29, 29, 29);
-    padding-bottom: 40px; /* Height of the footer */
 }
 
 

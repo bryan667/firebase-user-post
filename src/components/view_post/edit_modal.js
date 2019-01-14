@@ -6,8 +6,10 @@ import '../../css/edit_modal.css'
 const EditModal = ({post, onChange, closePost, savePost}) => {
     return (
         <Modal show={post.show} onHide={()=> closePost()}>
+            <Modal.Header>
+                <div>{'Edit Post'}</div>
+            </Modal.Header>
             <Modal.Body>
-                <div>{`postID: ${post.id}`}</div>
                 <textarea 
                     id='editModal'
                     onChange={(e)=> onChange(e)}
