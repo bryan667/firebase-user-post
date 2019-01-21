@@ -16,6 +16,7 @@ export const validateFunction = (element) => {
         error = !valid ? [valid,message] : error
     }
 
+    console.log(error)
     return error
 }
 

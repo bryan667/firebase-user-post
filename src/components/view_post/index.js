@@ -187,6 +187,8 @@ class ViewPost extends Component {
             [tempElement.id]: tempElement,
             formError: !tempElement.valid
         })
+
+        return !tempElement.valid
     }
 
     updateForm = (event) => {
@@ -197,9 +199,9 @@ class ViewPost extends Component {
 
     submitPost =()=> {
         const tempState = {...this.state}
-        this.errorCheck(tempState.textarea1)
+        const errorCheck = this.errorCheck(tempState.textarea1)
 
-        if (this.state.formError === false) {
+        if (errorCheck === false) {
             const date = new Date().toUTCString()
 
             const dataToSubmit = {
