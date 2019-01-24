@@ -11,12 +11,23 @@ footer {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-around;
-    max-width: 1000px;
+    max-width: 100rem;
     margin: auto;
 }
 
-.flex_container div,  .flex_container .glyph {
-    padding: 20px;
+.flex_container .contact,
+.flex_container .links,
+.flex_container .glyph {
+    padding: 2.0rem; 
+}
+
+@media only screen and (max-width: 400px) {
+    .flex_container .contact,
+    .flex_container .links,
+    .flex_container .glyph {
+        flex: 100%;
+        text-align: justify;
+    }
 }
 
 footer h2 {
@@ -30,7 +41,7 @@ footer a {
 
 footer .glyph {
     flex: 1;
-    font-size: 10.0rem;
+    font-size: 8.0rem;
 }
 
 footer .contact {
@@ -45,4 +56,5 @@ footer .copyright {
     flex: 100%;
     text-align: center;
     background-size: cover;
+    padding: 0.5rem;
 }

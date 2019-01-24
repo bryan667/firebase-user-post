@@ -1,6 +1,7 @@
 .signin_wrapper {
-    padding-top: 50px;
-    width: 300px;
+    padding-top: 5.0rem;
+    width: 30rem;
+    min-height: 50rem;
     height: 70vh;
     margin: auto;
 }
@@ -16,7 +17,7 @@
 }
 
 .signin_wrapper form .textarea {
-    padding-top: 20px;
+    padding-top: 2rem;
 }
 
 .signin_wrapper form textarea {

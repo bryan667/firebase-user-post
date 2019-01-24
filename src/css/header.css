@@ -6,7 +6,7 @@ active-blue: #2e6da4;
 .navbar {
     font-family: Righteous;
     font-size: 1.6rem;
-    margin: 0px;
+    margin: 0rem;
 }
 
 .navbar-nav li:hover {
@@ -43,18 +43,18 @@ active-blue: #2e6da4;
 
 @media (min-width: 1400px) {
     .container {
-        width: 1370px;
+        width: 137rem;
     }
 }
 
 @media (min-width: 1600px) {
     .container {
-        width: 1570px;
+        width: 157rem;
     }
 }
 
 @media (min-width: 1800px) {
     .container {
-        width: 1770px;
+        width: 177rem;
     }
 }

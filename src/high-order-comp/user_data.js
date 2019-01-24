@@ -13,18 +13,25 @@ export default function retrieveUserData(WrappedComponent) {
         }
 
         componentDidMount() {
+            this.mount = true
             if (this.props.user!=null) { 
                 firebaseUsers.orderByChild('email').equalTo(this.props.user.email).once('value', (snap)=> {
                     snap.forEach((data)=> {
-                        this.setState({
-                            firstName: data.val().firstName,
-                            lastName: data.val().lastName,
-                            email: data.val().email,
-                            imageURL: data.val().imageURL
-                        })
+                        if (this.mount === true) {
+                            this.setState({
+                                firstName: data.val().firstName,
+                                lastName: data.val().lastName,
+                                email: data.val().email,
+                                imageURL: data.val().imageURL
+                            })
+                        }
                     });
                 })
             }
+        }
+
+        componentWillUnmount() {
+            this.mount = false
         }
 
         render() {

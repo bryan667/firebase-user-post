@@ -1,5 +1,5 @@
 #myImg {
-  border-radius: 5px;
+  border-radius: 0.5rem;
   cursor: pointer;
   transition: 0.3s;
 }
@@ -10,7 +10,7 @@
 .modal {
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  padding-top: 10rem; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -24,8 +24,8 @@
   margin: auto;
   display: block;
   width: 80%;
-  min-width: 500px;
-  max-width: 800px;
+  min-width: 50rem;
+  max-width: 80rem;
 }
 
 /* Caption of Modal Image */
@@ -33,11 +33,11 @@
   margin: auto;
   display: block;
   width: 80%;
-  max-width: 700px;
+  max-width: 70rem;
   text-align: center;
   color: #ccc;
-  padding: 10px 0;
-  height: 150px;
+  padding: 1.0rem 0;
+  height: 15rem;
 }
 
 /* Add Animation */
@@ -53,10 +53,10 @@
 
 .close {
   position: absolute;
-  top: 15px;
-  right: 35px;
+  top: 1.5rem;
+  right: 3.5rem;
   color: #f1f1f1;
-  font-size: 40rem;
+  font-size: 8rem;
   font-weight: bold;
   transition: 0.3s;
 }

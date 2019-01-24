@@ -10,12 +10,19 @@ class UserImage extends Component {
     }
 
     componentDidMount(){
+        this.mount = true
         firebaseUsers.orderByChild('email').equalTo(this.props.email).once('value', ((snap)=> {
             const data = convertArray(snap)
-            this.setState({
-                imageURL: data[0].imageURL
-            })
+            if (this.mount === true) {
+                this.setState({
+                    imageURL: data[0].imageURL
+                })
+            }
         }))
+    }
+
+    componentWillUnmount() {
+        this.mount = false
     }
 
     render() {

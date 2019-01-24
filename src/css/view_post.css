@@ -5,16 +5,16 @@ h2 {
 
 .posts_block {
     margin: auto;
-    padding: 10px;
-    min-width: 560px;
+    padding: 1rem;
+    min-width: 56rem;
     width: 50%;
     background-color: rgb(238, 238, 238);
 }
 
 .posts_block .top {
-    margin-top: 5px;
-    border-radius: 10px;
-    padding: 10px;
+    margin-top: 0.5rem;
+    border-radius: 1rem;
+    padding: 1rem;
     background-color: rgb(255, 255, 255);
 }
 
@@ -24,12 +24,12 @@ h2 {
 
 .textarea_block {
     position: relative;
-    padding-bottom: 30px;
+    padding-bottom: 3rem;
 }
 
 .textarea_block textarea {
     width: 100%;
-    height: 150px;
+    height: 15rem;
 }
 
 .textarea_block button {    
@@ -38,18 +38,18 @@ h2 {
 }
 
 .image_up {
-    padding-bottom: 10px;
+    padding-bottom: 1rem;
 }
 
 .image_upload_wrapper {
     text-align: center;       
     position: relative;    
-    min-height: 300px;
+    min-height: 30rem;
 }
 
 .image_upload_wrapper img{  
     max-width: 100%;  
-    max-height: 500px;
+    max-height: 50rem;
     cursor: pointer;
 }
 
@@ -60,17 +60,17 @@ h2 {
     cursor: pointer;
     background: #5a99ca;
     color: #ffffff;
-    border: 1px solid white;
-    padding: 10px;
+    border: 0.1rem solid white;
+    padding: 1rem;
 }
 
 .posts_div {
     position: relative;
     background-color: rgb(255, 255, 255);
-    border-radius: 20px;
+    border-radius: 2rem;
     margin: auto;
-    padding: 10px;    
-    margin-top: 15px;
+    padding: 1rem;    
+    margin-top: 1.5rem;
     max-width: 100%;
 }
 
@@ -81,12 +81,12 @@ h2 {
 
 .posts_div .img_profile {   
     cursor: pointer;
-    width: 100px;
-    height: 100px;
+    width: 10rem;
+    height: 10rem;
 }
 
 .posts_div .right {
-    padding-left: 10px;
+    padding-left: 1rem;
 }
 
 .posts_div .edit_wrap {
@@ -102,13 +102,13 @@ h2 {
 .posts_div .full_name {
     cursor: pointer;
     font-family: Righteous;
-    padding-top: 5px;
+    padding-top: 0.5rem;
 }
 
 .posts_div .timestamp {
     font-size: 80%;
     color: #3f3f3fc0;
-    padding-bottom: 5px;
+    padding-bottom: 0.5rem;
 }
 
 .posts_div .img_post_wrapper {
@@ -118,19 +118,19 @@ h2 {
 .posts_div .img_post {
     margin: auto;
     max-width: 100%;
-    max-height: 500px;
+    max-height: 50rem;
 }
 
 .posts_div .img {
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 1px solid rgb(231, 231, 231);
+    border: 0.1rem solid rgb(231, 231, 231);
 }
 
 .posts_div p {
     text-align: justify;
-    padding: 10px;
+    padding: 1rem;
 }
 
 .posts_div .img_post {
@@ -138,7 +138,7 @@ h2 {
 }
 
 .img_profile .spinner_wrap {   
-    padding-top: 37px;
+    padding-top: 3.7rem;
 }
 
 .modal-backdrop {

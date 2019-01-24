@@ -7,9 +7,18 @@
   padding: 0;
 }
 
-html {
-  font-size: 62.5%;
-  /*10/16px - of the browser's set font size */
+@media (min-width: 1px) {
+    html {
+    font-size: 50.5%;
+    /*10/16px - of the browser's set font size */
+    }
+}
+
+@media (min-width: 600px) {
+    html {
+    font-size: 62.5%;
+    /*10/16px - of the browser's set font size */
+    }
 }
 
 @media (min-width: 1px) {
@@ -34,13 +43,6 @@ body {
     line-height: 1.42857143;
     color: rgb(29, 29, 29);
 }
-
-
-/* #root {
-    background-image: url('/images/22222.jpg');
-    background-repeat: repeat;
-    background-size: 1800px 1000px;
-} */
 
 .spinner {
     display: block;    
