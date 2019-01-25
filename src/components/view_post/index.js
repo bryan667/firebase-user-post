@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {Button, Glyphicon } from 'react-bootstrap'
 import ReactLoading from 'react-loading'
-import {validateFunction, showError, convertArray, reverseArray} from '../ui/misc'
+
+import {validateFunction, showError, convertArray, reverseArray, previewFile, removeImage, reset} from '../ui/misc'
 import EditModal from './edit_modal'
 import ImageModal from './image_modal'
 import RemoveModal from './remove_modal'
@@ -25,8 +26,10 @@ class ViewPost extends Component {
         itemsToDisplay: 10,
         posts: [],
         image:{
-            fileName: '',
-            url: '',
+            isUploading:false,
+            file: '',
+            previewResult: '',
+            error: '',
         },
         imageModal: {
             src: '',
@@ -204,65 +207,98 @@ class ViewPost extends Component {
         if (errorCheck === false) {
             const date = new Date().toUTCString()
 
-            const dataToSubmit = {
-                fullName: `${tempState.userData.firstName} ${tempState.userData.lastName}`,
-                email: tempState.userData.email,
-                post: tempState.textarea1.value,
-                timeStamp: date,
-                imageURL: tempState.image.url
+            if (tempState.image.file) {
+                const extra = new Date().getTime()
+                const name = Math.random().toString(36).substring(2, 15)+extra
+
+                const imageURL = firebase.storage().ref(`images/${name}`)
+                .put(tempState.image.file).then((snap) => {
+                    const url = snap.ref.getDownloadURL().then((url)=> {
+                        return url;
+                    })
+                    return url
+                })
+
+                imageURL.then((url)=> {
+                    const dataToSubmit = {
+                        fullName: `${tempState.userData.firstName} ${tempState.userData.lastName}`,
+                        email: tempState.userData.email,
+                        post: tempState.textarea1.value,
+                        timeStamp: date,
+                        imageURL: url
+                    }
+
+                    firebasePosts.push(dataToSubmit).then(()=> {
+                        console.log("Message posted!")
+                        this.reloadUserImg()
+                    }).catch(e=>{
+                        console.log("Unable to post. Something went wrong.")
+                        this.reloadUserImg()
+                    })
+                })
+
+            } else {
+                const dataToSubmit = {
+                    fullName: `${tempState.userData.firstName} ${tempState.userData.lastName}`,
+                    email: tempState.userData.email,
+                    post: tempState.textarea1.value,
+                    timeStamp: date,
+                    imageURL: ''
+                }
+                firebasePosts.push(dataToSubmit).then(()=> {
+                    console.log("Message posted!")
+                    this.reloadUserImg()
+                }).catch(e=>{
+                    console.log("Unable to post. Something went wrong.")
+                    this.reloadUserImg()
+                })
             }
 
-            firebasePosts.push(dataToSubmit).then(()=> {
-                console.log("Message posted!")
-            }).catch(e=>{
-                console.log("Unable to post. Something went wrong.")
-            })
-
-            tempState.image.fileName = ''
-            tempState.image.url = ''
+            tempState.image.isUploading = false
+            tempState.image.previewResult = ''
+            tempState.image.file = ''
+            tempState.image.error = ''
             tempState.textarea1.value = ''
-
+    
             this.setState({
                 image: tempState.image,
                 textarea1: tempState.textarea1,
                 disabled: true,
                 reload: true,
             })
-
-            setTimeout(()=> {
-                this.setState({
-                    reload: false
-                })
-            }, 0)
-
-            setTimeout(()=> {
-                this.setState({
-                    disabled: false
-                })
-            }, 1500)
         }
     }
 
-    storeFilename(imageFilename, imageURL) {
-        const imageData = {...this.state.image}
-        imageData.fileName = imageFilename
-        imageData.url = imageURL
-
-        this.setState({image: imageData})
+    reloadUserImg = () => {
+        this.setState({
+            disabled: false,
+            reload: false
+        })
     }
 
-    removeImage = () => {
-        firebase.storage().ref('images').child(this.state.image.fileName).delete().then(()=> {
-            console.log(`file has been deleted: ${this.state.image.fileName}`)
-        }).catch(function(error) {
-            console.log('Uh-oh, an error occurred!')
-        });
+    uploadAgain = () => {
+        const tempImage = this.state.image
 
-        const imageData = {...this.state.image}
-        imageData.fileName = ''
-        imageData.url = ''
+        removeImage(tempImage, (tempImage)=> {
+            this.setState({
+                image: tempImage
+            })
+        })
 
-        this.setState({image: imageData})
+        reset(tempImage, (tempImage)=> {
+            this.setState({
+                image: tempImage
+            })
+        })
+    }
+
+    previewFile = (event) => {
+        const tempImage = this.state.image
+        previewFile(event, tempImage, (tempImage) => {
+            this.setState({
+                image: tempImage
+            })
+        })
     }
 
     feedModal = (event) => {
@@ -366,11 +402,11 @@ class ViewPost extends Component {
                     <form className='form_block'>
                         <ImageUploader
                             tag={"Insert Image"}
-                            fileName={this.state.image.fileName}
-                            url={this.state.image.url}
-                            passFile={(filename, url)=> this.storeFilename(filename, url)}
-                            removeImage={()=> this.removeImage()}
-                            reset={()=> this.reset()}
+                            previewFile={(e)=> this.previewFile(e)}                            
+                            uploadAgain={()=> this.uploadAgain()}
+                            error={this.state.image.error}
+                            previewResult={this.state.image.previewResult}
+                            isUploading={this.state.image.isUploading}
                         />
                         <div className='textarea_block'>
                             <textarea

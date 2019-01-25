@@ -50,3 +50,59 @@ export const reverseArray = (array) => {
 
     return reversedArray
 }
+
+//=================================================================
+//                          IMAGE UPLOADS
+//=================================================================
+
+
+export const previewFile = (event, tempImage, cb) => {
+    const file = event.target.files[0]
+    const reader  = new FileReader()
+    const maxSize = 1024 * 300
+
+    if (file) {
+        reader.readAsDataURL(file)
+        const fileSize = file.size
+        const imageTest = /^image/i.test(file.type)
+
+        if (fileSize < maxSize) {
+            tempImage.isUploading = true
+            tempImage.previewResult = ''        
+            cb(tempImage)
+
+            reader.addEventListener('load', () => {
+                if (imageTest === true) {
+                    tempImage.file = file
+                    tempImage.isUploading = false
+                    tempImage.previewResult = reader.result
+                    tempImage.error = ''
+                    cb(tempImage)
+                } else {
+                    tempImage.isUploading = false
+                    tempImage.error = 'File is not an image'
+                    cb(tempImage)
+                }
+            }, false)
+
+        } else {
+            tempImage.error = `File is too large. Max image size is 300kb`
+            cb(tempImage)
+        }
+    } else {
+        tempImage.error = ''
+        cb(tempImage)
+    }
+}
+
+export const removeImage = (tempImage, cb) => {
+    tempImage.file = ''
+    cb(tempImage)
+}
+
+export const reset = (tempImage, cb) => {
+    tempImage.isUploading = false
+    tempImage.previewResult = ''
+    tempImage.error = ''
+    cb(tempImage)
+}
