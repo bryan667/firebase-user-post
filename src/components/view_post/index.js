@@ -203,10 +203,17 @@ class ViewPost extends Component {
     submitPost =()=> {
         const tempState = {...this.state}
         const errorCheck = this.errorCheck(tempState.textarea1)
+        const date = new Date().toUTCString()
+
+        const dataToSubmit = {
+            fullName: `${tempState.userData.firstName} ${tempState.userData.lastName}`,
+            email: tempState.userData.email,
+            post: tempState.textarea1.value,
+            timeStamp: date,
+            imageURL: ''
+        }
 
         if (errorCheck === false) {
-            const date = new Date().toUTCString()
-
             if (tempState.image.file) {
                 const extra = new Date().getTime()
                 const name = Math.random().toString(36).substring(2, 15)+extra
@@ -220,14 +227,7 @@ class ViewPost extends Component {
                 })
 
                 imageURL.then((url)=> {
-                    const dataToSubmit = {
-                        fullName: `${tempState.userData.firstName} ${tempState.userData.lastName}`,
-                        email: tempState.userData.email,
-                        post: tempState.textarea1.value,
-                        timeStamp: date,
-                        imageURL: url
-                    }
-
+                    dataToSubmit.imageURL = url
                     firebasePosts.push(dataToSubmit).then(()=> {
                         console.log("Message posted!")
                         this.reloadUserImg()
@@ -236,15 +236,7 @@ class ViewPost extends Component {
                         this.reloadUserImg()
                     })
                 })
-
             } else {
-                const dataToSubmit = {
-                    fullName: `${tempState.userData.firstName} ${tempState.userData.lastName}`,
-                    email: tempState.userData.email,
-                    post: tempState.textarea1.value,
-                    timeStamp: date,
-                    imageURL: ''
-                }
                 firebasePosts.push(dataToSubmit).then(()=> {
                     console.log("Message posted!")
                     this.reloadUserImg()
